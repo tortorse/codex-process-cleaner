@@ -8,6 +8,8 @@
 
 一个原生 macOS 小工具，用来查看并关闭由 Codex 项目任务启动、但在任务结束后仍留在后台的程序。它不限定程序名称，也不会把普通项目进程当成 Codex 进程。
 
+![Codex 进程清理器界面](Resources/Screenshots/interface-zh-CN.png)
+
 ## 功能
 
 - 根据进程继承的 `CODEX_THREAD_ID` 判断来源，并继续追踪它启动的子进程。

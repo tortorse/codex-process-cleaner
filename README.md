@@ -8,6 +8,8 @@
 
 A small native macOS utility that finds processes started by Codex project tasks and left running after their parent task has ended. It is not limited to specific executable names and does not treat unrelated development processes as Codex processes.
 
+![Codex Process Cleaner interface](Resources/Screenshots/interface-en.png)
+
 ## Features
 
 - Uses the inherited `CODEX_THREAD_ID` marker and follows descendants created by that process.
