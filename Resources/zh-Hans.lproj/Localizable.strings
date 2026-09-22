@@ -1,0 +1,65 @@
+"age.days" = "%ld天";
+"age.hours" = "%ld小时";
+"age.minutes" = "%ld分钟";
+"age.seconds" = "%ld秒";
+
+"status.recommended" = "建议关闭";
+"status.review" = "手动判断";
+"status.protected" = "必须保留";
+
+"reason.demo.detached" = "Codex 示例任务 %@ 启动；父进程已结束，仍在后台运行";
+"reason.demo.active" = "仍属于 Codex 示例任务 %@；关闭可能中断正在进行的工作";
+"reason.detached.recommended" = "Codex 任务 %@ 启动；父进程已结束，仍在后台运行";
+"reason.detached.review" = "Codex 任务 %@ 启动；已脱离父进程，请确认是否仍需使用";
+"reason.active.review" = "仍属于 Codex 任务 %@；关闭可能中断正在进行的工作";
+
+"error.processCheck.start" = "无法启动系统进程检查。";
+"error.processCheck.read" = "系统返回的进程信息无法读取。";
+"error.taskMarker.start" = "无法读取 Codex 任务标记。";
+"error.taskMarker.read" = "Codex 任务标记无法读取。";
+
+"app.title" = "Codex 进程清理器";
+"app.subtitle" = "查找 Codex 项目任务启动后仍在运行的程序，不限于 Node.js 或 Python。";
+"metric.memory" = "相关内存";
+"metric.recommended" = "建议关闭";
+"metric.processes" = "相关程序";
+
+"filter.closeableOnly" = "只看可关闭";
+"filter.closeableOnly.tooltip" = "隐藏必须保留的程序";
+"refresh.auto" = "每 5 秒刷新";
+"refresh.notChecked" = "尚未检查";
+"refresh.now" = "立即刷新";
+"refresh.now.tooltip" = "重新读取当前进程";
+"refresh.updatedAt" = "更新于 %@";
+
+"column.process" = "程序";
+"column.status" = "建议";
+"column.details" = "说明与启动命令";
+"column.usage" = "占用 · 时间 · CPU";
+
+"empty.icon.description" = "未发现程序";
+"empty.title" = "没有相关程序";
+"empty.subtitle" = "Codex 项目任务启动后仍在运行的程序会显示在这里。";
+"empty.filtered.title" = "没有符合筛选条件的程序";
+"empty.filtered.subtitle" = "关闭“只看可关闭”即可查看其他任务进程。";
+"empty.noTasks.title" = "没有任务进程";
+
+"scan.loading" = "正在读取 Codex 启动的程序…";
+"scan.checking" = "正在检查…";
+"scan.failed.message" = "检查失败。";
+"scan.failed.status" = "检查失败";
+"scan.found" = "已检查 %ld 个任务进程。";
+"scan.none" = "没有发现 Codex 项目任务留下的进程。";
+
+"selection.summary" = "已选 %ld 个 · 约 %@";
+"action.selectRecommended" = "选择建议项";
+"action.clear" = "清除选择";
+"action.closeSelected" = "关闭所选程序";
+"action.closeAll" = "全部关闭…";
+"action.cancel" = "取消";
+
+"closeAll.title" = "关闭全部 %ld 个可关闭程序？";
+"closeAll.detail" = "预计涉及 %@ 内存。“手动判断”项目也会关闭，正在运行的 Codex 任务可能中断；Codex 需要时可能再次启动这些程序。不会关闭 Codex 主程序和当前界面。";
+"closeAll.confirm" = "全部关闭";
+"close.result.partial" = "已请求关闭 %ld 个；%ld 个未能关闭。";
+"close.result.success" = "已请求关闭 %ld 个程序；仍在使用的程序可能会重新出现。";

@@ -1,0 +1,65 @@
+"age.days" = "%ld days";
+"age.hours" = "%ld hr";
+"age.minutes" = "%ld min";
+"age.seconds" = "%ld sec";
+
+"status.recommended" = "Recommended";
+"status.review" = "Review";
+"status.protected" = "Keep";
+
+"reason.demo.detached" = "Codex demo task %@ started this process; its parent has exited, but it is still running in the background";
+"reason.demo.active" = "Still belongs to Codex demo task %@; closing it may interrupt active work";
+"reason.detached.recommended" = "Codex task %@ started this process; its parent has exited, but it is still running in the background";
+"reason.detached.review" = "Codex task %@ started this process; it is detached, so check whether it is still needed";
+"reason.active.review" = "Still belongs to Codex task %@; closing it may interrupt active work";
+
+"error.processCheck.start" = "Could not start the system process check.";
+"error.processCheck.read" = "Could not read the process information returned by the system.";
+"error.taskMarker.start" = "Could not read Codex task markers.";
+"error.taskMarker.read" = "The Codex task markers could not be decoded.";
+
+"app.title" = "Codex Process Cleaner";
+"app.subtitle" = "Find programs still running after Codex project tasks, including tools beyond Node.js and Python.";
+"metric.memory" = "Related Memory";
+"metric.recommended" = "Recommended";
+"metric.processes" = "Processes";
+
+"filter.closeableOnly" = "Closeable Only";
+"filter.closeableOnly.tooltip" = "Hide processes that must be kept";
+"refresh.auto" = "Refresh Every 5 Seconds";
+"refresh.notChecked" = "Not checked yet";
+"refresh.now" = "Refresh Now";
+"refresh.now.tooltip" = "Read the current process list again";
+"refresh.updatedAt" = "Updated at %@";
+
+"column.process" = "Process";
+"column.status" = "Status";
+"column.details" = "Details and Launch Command";
+"column.usage" = "Memory · Time · CPU";
+
+"empty.icon.description" = "No processes found";
+"empty.title" = "No Related Processes";
+"empty.subtitle" = "Programs still running after a Codex project task will appear here.";
+"empty.filtered.title" = "No Processes Match the Filter";
+"empty.filtered.subtitle" = "Turn off “Closeable Only” to see the other task processes.";
+"empty.noTasks.title" = "No Task Processes";
+
+"scan.loading" = "Reading programs started by Codex…";
+"scan.checking" = "Checking…";
+"scan.failed.message" = "Check failed.";
+"scan.failed.status" = "Check failed";
+"scan.found" = "Checked %ld task processes.";
+"scan.none" = "No processes left by Codex project tasks were found.";
+
+"selection.summary" = "%ld selected · about %@";
+"action.selectRecommended" = "Select Recommended";
+"action.clear" = "Clear";
+"action.closeSelected" = "Close Selected";
+"action.closeAll" = "Close All…";
+"action.cancel" = "Cancel";
+
+"closeAll.title" = "Close all %ld closeable processes?";
+"closeAll.detail" = "About %@ of memory is involved. Items marked “Review” will also be closed, which may interrupt active Codex tasks. Codex may restart programs it still needs. The Codex app and this window will not be closed.";
+"closeAll.confirm" = "Close All";
+"close.result.partial" = "Requested that %ld processes close; %ld could not be closed.";
+"close.result.success" = "Requested that %ld processes close; programs still in use may reappear.";

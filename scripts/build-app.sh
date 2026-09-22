@@ -20,6 +20,7 @@ clang \
 
 cp "$project_dir/Info.plist" "$contents_dir/Info.plist"
 cp "$project_dir/Resources/AppIcon.icns" "$resources_dir/AppIcon.icns"
+cp -R "$project_dir/Resources/en.lproj" "$project_dir/Resources/zh-Hans.lproj" "$resources_dir/"
 chmod +x "$macos_dir/CodexProcessCleaner"
 codesign --force --deep --sign - "$app_dir" >/dev/null
 

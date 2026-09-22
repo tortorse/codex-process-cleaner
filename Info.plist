@@ -3,9 +3,14 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>zh_CN</string>
+    <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Codex 进程清理器</string>
+    <string>Codex Process Cleaner</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>zh-Hans</string>
+    </array>
     <key>CFBundleExecutable</key>
     <string>CodexProcessCleaner</string>
     <key>CFBundleIconFile</key>
@@ -23,9 +28,9 @@
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.1.0</string>
+    <string>1.2.0</string>
     <key>CFBundleVersion</key>
-    <string>2</string>
+    <string>3</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHighResolutionCapable</key>
