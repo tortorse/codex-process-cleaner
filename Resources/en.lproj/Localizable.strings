@@ -17,6 +17,7 @@
 "error.processCheck.read" = "Could not read the process information returned by the system.";
 "error.taskMarker.start" = "Could not read Codex task markers.";
 "error.taskMarker.read" = "The Codex task markers could not be decoded.";
+"error.taskMarker.unavailable" = "Codex is running, but no task markers are visible. This check cannot tell which processes belong to a task.";
 
 "app.title" = "Codex Process Cleaner";
 "app.subtitle" = "Find programs still running after Codex project tasks, including tools beyond Node.js and Python.";
@@ -43,6 +44,8 @@
 "empty.filtered.title" = "No Processes Match the Filter";
 "empty.filtered.subtitle" = "Turn off “Closeable Only” to see the other task processes.";
 "empty.noTasks.title" = "No Task Processes";
+"empty.unavailable.title" = "Cannot Check Reliably";
+"empty.unavailable.subtitle" = "The process list is incomplete or Codex task markers are unavailable.";
 
 "scan.loading" = "Reading programs started by Codex…";
 "scan.checking" = "Checking…";

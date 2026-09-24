@@ -58,22 +58,24 @@ static NSInteger elapsedSeconds(NSString *text) {
     if (!stream) { if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:1 userInfo:@{NSLocalizedDescriptionKey:L(@"error.processCheck.start")}]; return nil; }
     NSMutableData *processData=[NSMutableData data]; char buffer[8192]; size_t length=0;
     while((length=fread(buffer,1,sizeof(buffer),stream))>0)[processData appendBytes:buffer length:length];
-    pclose(stream);
+    int processStatus=pclose(stream);
     NSString *output=[[NSString alloc] initWithData:processData encoding:NSUTF8StringEncoding];
-    if (!output) { if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:2 userInfo:@{NSLocalizedDescriptionKey:L(@"error.processCheck.read")}];return nil; }
+    if (processStatus!=0||!output.length) { if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:2 userInfo:@{NSLocalizedDescriptionKey:L(@"error.processCheck.read")}];return nil; }
     NSRegularExpression *re=[NSRegularExpression regularExpressionWithPattern:@"^\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+([0-9.]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.+)$" options:0 error:nil];
     NSMutableArray *items=[NSMutableArray array];
     [output enumerateLinesUsingBlock:^(NSString *line, BOOL *stop){
         NSTextCheckingResult *m=[re firstMatchInString:line options:0 range:NSMakeRange(0,line.length)];if(!m||m.numberOfRanges!=9)return;
         NSString *(^f)(NSInteger)=^NSString*(NSInteger i){return [line substringWithRange:[m rangeAtIndex:i]];};
         RawProcess *p=[RawProcess new];p.pid=f(1).intValue;p.ppid=f(2).intValue;p.uid=f(3).intValue;p.rss=f(4).longLongValue;p.cpu=f(5).doubleValue;p.elapsed=elapsedSeconds(f(6));p.exe=f(7);p.command=f(8);[items addObject:p];
-    }]; return items;
+    }];
+    if(!items.count&&error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:2 userInfo:@{NSLocalizedDescriptionKey:L(@"error.processCheck.read")}];
+    return items.count?items:nil;
 }
 - (NSDictionary<NSNumber *,NSString *> *)markedThreads:(NSError **)error {
     FILE *stream=popen("/bin/ps eww -axo 'pid=,command=' 2>/dev/null", "r");
     if(!stream){if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:3 userInfo:@{NSLocalizedDescriptionKey:L(@"error.taskMarker.start")}];return nil;}
-    NSMutableData *data=[NSMutableData data];char buffer[16384];size_t length=0;while((length=fread(buffer,1,sizeof(buffer),stream))>0)[data appendBytes:buffer length:length];pclose(stream);
-    NSString *output=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];if(!output){if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:4 userInfo:@{NSLocalizedDescriptionKey:L(@"error.taskMarker.read")}];return nil;}
+    NSMutableData *data=[NSMutableData data];char buffer[16384];size_t length=0;while((length=fread(buffer,1,sizeof(buffer),stream))>0)[data appendBytes:buffer length:length];int markerStatus=pclose(stream);
+    NSString *output=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];if(markerStatus!=0||!output.length){if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:4 userInfo:@{NSLocalizedDescriptionKey:L(@"error.taskMarker.read")}];return nil;}
     NSMutableDictionary *threads=[NSMutableDictionary dictionary];NSString *marker=@"CODEX_THREAD_ID=";
     [output enumerateLinesUsingBlock:^(NSString *line,BOOL *stop){
         NSRange markerRange=[line rangeOfString:marker];if(markerRange.location==NSNotFound)return;
@@ -86,6 +88,11 @@ static NSInteger elapsedSeconds(NSString *text) {
 - (NSArray<ProcessItem *> *)scan:(NSError **)error {
     if([NSProcessInfo.processInfo.arguments containsObject:@"--demo"])return [self demo];
     NSArray *raw=[self raw:error];if(!raw)return nil;NSDictionary *marked=[self markedThreads:error];if(!marked)return nil;
+    if(!marked.count){
+        BOOL codexRunning=NO;
+        for(RawProcess*p in raw){NSString*name=p.exe.lastPathComponent.lowercaseString;if(p.uid==getuid()&&([name isEqualToString:@"codex"]||[name isEqualToString:@"codex-code-mode-host"])){codexRunning=YES;break;}}
+        if(codexRunning){if(error)*error=[NSError errorWithDomain:@"CodexProcessGuard" code:5 userInfo:@{NSLocalizedDescriptionKey:L(@"error.taskMarker.unavailable")}];return nil;}
+    }
     NSMutableDictionary *map=[NSMutableDictionary dictionary];for(RawProcess*p in raw)map[@(p.pid)]=p;
     NSString *(^threadForPID)(pid_t)=^NSString*(pid_t pid){NSMutableSet*seen=[NSMutableSet set];pid_t current=pid;for(int i=0;i<60;i++){NSString*thread=marked[@(current)];if(thread.length)return thread;RawProcess*p=map[@(current)];if(!p||p.ppid<=0||[seen containsObject:@(current)])return nil;[seen addObject:@(current)];current=p.ppid;}return nil;};
     BOOL (^isOwnTree)(pid_t)=^BOOL(pid_t pid){pid_t current=pid;NSMutableSet*seen=[NSMutableSet set];for(int i=0;i<60;i++){if(current==getpid())return YES;RawProcess*p=map[@(current)];if(!p||p.ppid<=0||[seen containsObject:@(current)])return NO;[seen addObject:@(current)];current=p.ppid;}return NO;};
@@ -167,7 +174,7 @@ static NSTextField *label(NSString *text,CGFloat size,NSFontWeight weight){NSTex
     if(self.scanning)return;self.scanning=YES;self.message.stringValue=L(@"scan.checking");self.refreshButton.enabled=NO;[self.spinner startAnimation:nil];
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED,0),^{NSError*e=nil;NSArray*found=[[Scanner new]scan:&e];dispatch_async(dispatch_get_main_queue(),^{
         self.scanning=NO;self.refreshButton.enabled=YES;[self.spinner stopAnimation:nil];
-        if(!found){self.message.stringValue=e.localizedDescription?:L(@"scan.failed.message");self.updatedText.stringValue=L(@"scan.failed.status");return;}
+        if(!found){self.items=[NSMutableArray array];[self.table reloadData];[self update];self.emptyTitle.stringValue=L(@"empty.unavailable.title");self.emptySubtitle.stringValue=L(@"empty.unavailable.subtitle");self.message.stringValue=e.localizedDescription?:L(@"scan.failed.message");self.updatedText.stringValue=L(@"scan.failed.status");return;}
         NSMutableSet*old=[NSMutableSet set];for(ProcessItem*p in self.items)if(p.selected)[old addObject:@(p.pid)];self.items=[found mutableCopy];
         for(ProcessItem*p in self.items)if([old containsObject:@(p.pid)]||(select&&p.safety==Recommended))p.selected=YES;
         NSDateFormatter*formatter=[NSDateFormatter new];formatter.dateFormat=@"HH:mm:ss";self.updatedText.stringValue=[NSString stringWithFormat:L(@"refresh.updatedAt"),[formatter stringFromDate:NSDate.date]];

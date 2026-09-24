@@ -20,6 +20,7 @@ A small native macOS utility that finds processes started by Codex project tasks
 - Protects the Codex app, current interface, and the cleaner itself.
 - Sends `SIGTERM` only. It does not delete files and does not need administrator access.
 - Native AppKit application with no third-party runtime or package dependency.
+- If Codex is running but task markers are unavailable, the app reports that it cannot check reliably instead of claiming there are no task processes. Detached processes without a marker cannot be attributed to a task reliably.
 - English and Simplified Chinese interface that follows the macOS language setting.
 
 ## Requirements

@@ -17,6 +17,7 @@
 "error.processCheck.read" = "系统返回的进程信息无法读取。";
 "error.taskMarker.start" = "无法读取 Codex 任务标记。";
 "error.taskMarker.read" = "Codex 任务标记无法读取。";
+"error.taskMarker.unavailable" = "Codex 正在运行，但没有读到任务标记，无法判断哪些进程属于任务。";
 
 "app.title" = "Codex 进程清理器";
 "app.subtitle" = "查找 Codex 项目任务启动后仍在运行的程序，不限于 Node.js 或 Python。";
@@ -43,6 +44,8 @@
 "empty.filtered.title" = "没有符合筛选条件的程序";
 "empty.filtered.subtitle" = "关闭“只看可关闭”即可查看其他任务进程。";
 "empty.noTasks.title" = "没有任务进程";
+"empty.unavailable.title" = "无法可靠检查";
+"empty.unavailable.subtitle" = "进程列表不完整，或无法读取 Codex 任务标记。";
 
 "scan.loading" = "正在读取 Codex 启动的程序…";
 "scan.checking" = "正在检查…";
